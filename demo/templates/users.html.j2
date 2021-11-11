@@ -1,0 +1,33 @@
+{% extends 'base.html.j2' %}
+
+{% block title %}
+    Users Page
+{% endblock %}
+
+{% block content %}
+    <!-- Jinja2 value access from flask-->
+    <p>Current user: {{ userName }}</p>
+    <table class="table table-hover table-light">
+    <thead>
+        <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Options</th>
+        </tr>
+    </thead>
+    <thead>
+        <!-- Jinja2 logic access for loop-->
+        {% for user in users %}
+        <tr>
+        <!-- Jinja2 access iterator values where iterator is a dict-->
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>
+            <button class="btn btn-outline-info">More Info</button>
+            <button class="btn btn-outline-danger">Remove</button>
+        </td>
+        </tr>
+        {% endfor %}
+    </thead>
+    </table>
+{% endblock %}
