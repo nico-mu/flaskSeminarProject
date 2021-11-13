@@ -5,6 +5,8 @@
 !.vscode/extensions.json
 *.code-workspace
 
+/demo/database.db
+
 # Local History for Visual Studio Code
 .history/
 # Byte-compiled / optimized / DLL files
