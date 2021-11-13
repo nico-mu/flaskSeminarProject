@@ -2,7 +2,7 @@
 '''
 Main Module for the app
 '''
-# Versions  Python   3.8.2
+# Versions  Python   3.8.10
 #           Flask    2.0.2
 
 from flask import Flask
