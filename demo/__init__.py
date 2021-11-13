@@ -5,12 +5,20 @@ Main Module for the app
 # Versions  Python   3.8.2
 #           Flask    2.0.2
 
-
-
 from flask import Flask
-from dotenv import load_dotenv
+from flask_sqlalchemy import SQLAlchemy
 
-load_dotenv()
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'thisissecret'
+app.config['DEBUG'] = True
+db = SQLAlchemy(app)
 
+'''
+add import statements here to avoid circular imports
+'''
+#pylint: disable=wrong-import-position
 import demo.views
+import demo.models
+#pylint: enable=wrong-import-position
