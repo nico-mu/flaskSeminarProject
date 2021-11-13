@@ -5,7 +5,7 @@
 !.vscode/extensions.json
 *.code-workspace
 
-/demo/database.db
+*.db
 
 # Local History for Visual Studio Code
 .history/
