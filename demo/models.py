@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 '''
 Contains all the models for the application
 '''
