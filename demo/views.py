@@ -6,6 +6,8 @@ import os
 from flask.templating import render_template
 from flask import send_from_directory
 from demo import app
+from demo.models import *
+from demo.forms import RegisterForm, LoginForm
 
 
 @app.route("/")
@@ -30,12 +32,8 @@ def users():
     '''
     This function renders the users.html.j2 template
     '''
-    data = [
-        {'id': 1, 'name': 'test1'},
-        {'id': 2, 'name': 'test2'},
-        {'id': 3, 'name': 'test3'},
-    ]
-    return render_template('users.html.j2', users=data, userName="TestName")
+    users = User.query.all()
+    return render_template('users.html.j2', users=users, userName="TestName")
 
 
 @app.route('/favicon.ico')
@@ -45,3 +43,19 @@ def favicon():
     '''
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+@app.route('/register')
+def register():
+    '''
+    This function renders the register.html.j2 template
+    '''
+    form = RegisterForm()
+    return render_template('register.html.j2', form=form)
+
+@app.route('/login')
+def login():
+    '''
+    This function renders the register.html.j2 template
+    '''
+    form = LoginForm()
+    return render_template('login.html.j2', form=form)
