@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from demo import db
 from demo.models import User, Server
 
