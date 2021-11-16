@@ -37,3 +37,15 @@ class Server(db.Model):
 
     def __repr__(self):
         return f'<Server {self.name}>'
+
+class Message(db.Model):
+    '''
+    Message table
+    '''
+    __tablename__ = 'message'
+    id = db.Column(db.Integer(), primary_key=True)
+    payload = db.Column(db.String(length=256), nullable=False)
+    sender = db.Column(db.Integer(), db.ForeignKey('user.id'), nullable=False)
+    receiver = db.Column(db.Integer(), db.ForeignKey('user.id'), nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False)
+    server = db.Column(db.Integer(), db.ForeignKey('server.id'))
