@@ -28,6 +28,7 @@ def about():
 
 
 @app.route("/users")
+@flask_login.login_required
 def users():
     '''
     This function renders the users.html.j2 template
@@ -87,5 +88,6 @@ def logout():
     This function logs out the user
     '''
     # show an alert message
+    flask_login.logout_user()
     flash('User successfully logged out', category='success')
     return redirect(url_for('index'))

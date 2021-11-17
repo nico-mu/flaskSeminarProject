@@ -19,6 +19,8 @@ app.config['DEBUG'] = True
 db = SQLAlchemy(app)
 bycrypt = Bcrypt(app)
 login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+login_manager.login_message_category = 'info'
 
 '''
 add import statements here to avoid circular imports
