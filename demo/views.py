@@ -4,11 +4,10 @@ Contains the views for the application.
 '''
 import os
 from flask.templating import render_template
-from flask import send_from_directory, redirect, url_for
+from flask import send_from_directory, redirect, url_for, flash
 from demo import app, db
 from demo.models import *
 from demo.forms import RegisterForm, LoginForm
-
 
 @app.route("/")
 @app.route("/home")
@@ -55,7 +54,12 @@ def register():
         user = User(name=form.username.data, password_hash=form.password.data)
         db.session.add(user)
         db.session.commit()
+        # show an alert message
+        flash('User successfully registered')
         return redirect(url_for('login'))
+    if form.errors:
+        for error in form.errors.values():
+            flash(error[0])
     return render_template('register.html.j2', form=form)
 
 # Cross Site Request Forgery (CSRF) protection needed in register.html.j2 and login.html.j2 by adding {{ form.hidden_tag() }}
