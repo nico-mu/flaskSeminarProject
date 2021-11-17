@@ -56,9 +56,10 @@ def register():
         user = User(name=form.username.data, password=form.password.data)
         db.session.add(user)
         db.session.commit()
+        flask_login.login_user(user)
         # show an alert message
         flash('User successfully registered', category='success')
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
     if form.errors:
         for error in form.errors.values():
             flash(error[0])
