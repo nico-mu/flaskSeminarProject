@@ -12,6 +12,7 @@ setup(
         'flask',
         'flask_sqlalchemy',
         'flask-wtf',
-        'wtforms'
+        'wtforms',
+        'flask_bcrypt'
     ],
 )

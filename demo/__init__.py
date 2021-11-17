@@ -7,6 +7,7 @@ Main Module for the app
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -15,6 +16,7 @@ app.config['SECRET_KEY'] = 'thisissecret'
 app.config['DEBUG'] = True
 
 db = SQLAlchemy(app)
+bycrypt = Bcrypt(app)
 
 '''
 add import statements here to avoid circular imports

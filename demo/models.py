@@ -2,7 +2,7 @@
 '''
 Contains all the models for the application
 '''
-from demo import db
+from demo import db, bycrypt
 
 # Association table for many-to-many relationship between users and servers
 association_table = db.Table('association', db.Model.metadata,
@@ -20,6 +20,26 @@ class User(db.Model):
     password_hash = db.Column(db.String(length=60), nullable=False)
     servers = db.relationship('Server', secondary=association_table,
         back_populates="members")
+
+    @property
+    def password(self):
+        '''
+        Prevent password from being accessed
+        '''
+        raise AttributeError('password is not a readable attribute.')
+    
+    @password.setter
+    def password(self, password):
+        '''
+        Set password to a hashed password
+        '''
+        self.password_hash = bycrypt.generate_password_hash(password).decode('utf-8')
+
+    def verify_password(self, password):
+        '''
+        Check if hashed password matches actual password
+        '''
+        return bycrypt.check_password_hash(self.password_hash, password)
 
     def __repr__(self):
         return f'<User {self.name}>'

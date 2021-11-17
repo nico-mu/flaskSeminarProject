@@ -3,8 +3,8 @@ from demo import db
 from demo.models import User, Server, Message
 from datetime import datetime
 
-nico = User(name='Nico', password_hash="12345")
-luca = User(name='Luca', password_hash="123")
+nico = User(name='Nico', password="12345")
+luca = User(name='Luca', password="123")
 serverOne = Server(name='serverOne', status=False)
 serverTwo = Server(name='serverTwo', status=True)
 db.drop_all()
