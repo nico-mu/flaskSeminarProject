@@ -2,7 +2,8 @@
 '''
 Contains all the models for the application
 '''
-from demo import db, bycrypt
+from demo import db, bycrypt, login_manager
+from flask_login import UserMixin
 
 # Association table for many-to-many relationship between users and servers
 association_table = db.Table('association', db.Model.metadata,
@@ -10,9 +11,19 @@ association_table = db.Table('association', db.Model.metadata,
     db.Column('server_id', db.ForeignKey('server.id'), primary_key=True)
 )
 
-class User(db.Model):
+
+@login_manager.user_loader
+def load_user(user_id):
+    '''
+    This function is used by Flask-Login to load a user from the database
+    '''
+    return User.query.get(int(user_id))
+
+class User(db.Model, UserMixin):
     '''
     User table
+    UserMixin is a class that provides default implementations for the methods
+    that Flask-Login expects user objects to have.
     '''
     __tablename__ = 'user'
     id = db.Column(db.Integer(), primary_key=True)

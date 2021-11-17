@@ -27,3 +27,4 @@ class LoginForm(FlaskForm):
     username = StringField('Username')
     password = StringField('Password')
     submit = SubmitField('Login')
+    remember_me = StringField('Remember Me')

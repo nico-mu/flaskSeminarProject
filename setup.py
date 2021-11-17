@@ -13,6 +13,7 @@ setup(
         'flask_sqlalchemy',
         'flask-wtf',
         'wtforms',
-        'flask_bcrypt'
+        'flask_bcrypt',
+        'flask_login'
     ],
 )

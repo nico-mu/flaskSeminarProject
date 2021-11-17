@@ -5,6 +5,7 @@ Contains the views for the application.
 import os
 from flask.templating import render_template
 from flask import send_from_directory, redirect, url_for, flash
+import flask_login
 from demo import app, db
 from demo.models import *
 from demo.forms import RegisterForm, LoginForm
@@ -32,7 +33,7 @@ def users():
     This function renders the users.html.j2 template
     '''
     users = User.query.all()
-    return render_template('users.html.j2', users=users, userName="TestName")
+    return render_template('users.html.j2', users=users)
 
 
 @app.route('/favicon.ico')
@@ -55,7 +56,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         # show an alert message
-        flash('User successfully registered')
+        flash('User successfully registered', category='success')
         return redirect(url_for('login'))
     if form.errors:
         for error in form.errors.values():
@@ -69,4 +70,22 @@ def login():
     This function renders the login.html.j2 template
     '''
     form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(name=form.username.data).first()
+        if user is None or not user.verify_password(form.password.data):
+            flash('Invalid username or password', category='error')
+            return redirect(url_for('login'))
+        # show an alert message
+        flask_login.login_user(user)
+        flash('User successfully logged in', category='success')
+        return redirect(url_for('index'))
     return render_template('login.html.j2', form=form)
+
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    '''
+    This function logs out the user
+    '''
+    # show an alert message
+    flash('User successfully logged out', category='success')
+    return redirect(url_for('index'))
