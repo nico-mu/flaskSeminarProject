@@ -4,11 +4,11 @@ Contains the views for the application.
 '''
 import os
 from flask.templating import render_template
-from flask import send_from_directory, redirect, url_for, flash
+from flask import send_from_directory, redirect, url_for, flash, request
 import flask_login
 from demo import app, db
 from demo.models import *
-from demo.forms import RegisterForm, LoginForm
+from demo.forms import AddUserForm, RegisterForm, LoginForm, RemoveUserForm
 
 @app.route("/")
 @app.route("/home")
@@ -27,15 +27,55 @@ def about():
     return render_template("about.j2")
 
 
-@app.route("/users")
+@app.route("/users", methods=["GET"])
 @flask_login.login_required
 def users():
     '''
     This function renders the users.html.j2 template
     '''
+    addUserForm = AddUserForm()
+    removeUserForm = RemoveUserForm()
     users = User.query.all()
-    return render_template('users.html.j2', users=users)
+    return render_template('users.html.j2', users=users, removeUserForm=removeUserForm, addUserForm=addUserForm)
 
+@app.route("/users/removeUser", methods=["GET", "POST"])
+@flask_login.login_required
+def removeUser():
+    '''
+    Subroute of users. This funtions handles removing users.
+    '''
+    removeUserForm = RemoveUserForm()
+    addUserForm = AddUserForm()
+    if request.method == "POST":
+        user = User.query.filter_by(id=request.form.get("removeUser")).first()
+        db.session.delete(user)
+        db.session.commit()
+        flash("User deleted successfully!", "success")
+        return redirect(url_for("users"))
+    users = User.query.all()
+    return render_template('users.html.j2', users=users, removeUserForm=removeUserForm, addUserForm=addUserForm)
+
+@app.route("/users/addUser", methods=["GET", "POST"])
+@flask_login.login_required
+def addUser():
+    '''
+    Subroute of users. This funtions handles adding users.
+    '''
+    removeUserForm = RemoveUserForm()
+    addUserForm = AddUserForm()
+    if request.method == "POST":
+        name = request.form.get("name")
+        password = request.form.get("password")
+        admin = request.form.get("admin")
+        if admin == "y":
+            admin = True
+        user = User(name=name, password=password, admin=admin)
+        db.session.add(user)
+        db.session.commit()
+        flash("User added successfully!", "success")
+        return redirect(url_for("users"))
+    users = User.query.all()
+    return render_template('users.html.j2', users=users, removeUserForm=removeUserForm, addUserForm=addUserForm)
 
 @app.route('/favicon.ico')
 def favicon():

@@ -23,12 +23,12 @@
         <td>{{ user.id }}</td>
         <td>{{ user.name }}</td>
         <td>
-            <button class="btn btn-outline-info" data-toggle="modal" data-target="#userInfoModal-{{ user.id }}" id="buttonUserInfo-{{ user.id }}">More Info</button>
+            <button class="btn btn-outline-info" data-toggle="modal" data-target="#userInfoModal-{{ user.id }}">More Info</button>
             <button class="btn btn-outline-danger" data-toggle="modal" data-target="#removeUserModal-{{ user.id }}">Remove</button>
         </td>
         </tr>
         {% endfor %}
     </thead>
     </table>
-    <button class="btn btn-outline-primary">Add User</button>
+    <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addUserModal">Add User</button>
 {% endblock %}

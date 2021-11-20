@@ -33,11 +33,50 @@
         </button>
       </div>
       <div class="modal-body">
-        Do you really want to remove {{ user.name }}?
+        <form method="POST" action="{{ url_for('removeUser') }}">
+          {{ removeUserForm.hidden_tag() }}
+          <input id="removeUser" name="removeUser" type="hidden" value="{{ user.id }}">
+          <h4 class="text-center">
+            Do you really want to remove {{ user.name }}?
+          </h4>
+          {{ removeUserForm.submit(class="btn btn-outline-danger btn-block") }}
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add User Modal -->
+<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add new user</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{{ url_for('addUser') }}">
+          {{ addUserForm.hidden_tag() }}
+          <input id="addUser" name="addUser" type="hidden" value="addUser">
+          {{ addUserForm.name.label() }}
+          {{ addUserForm.name(class="form-control", placeholder="User Name") }}
+
+          {{ addUserForm.password.label() }}
+          {{ addUserForm.password(class="form-control", placeholder="Password") }}
+          <br>
+          {{ addUserForm.admin.label() }}
+          {{ addUserForm.admin() }}
+          <br>
+          {{ addUserForm.submit(class="btn btn-outline-danger btn-block") }}
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
