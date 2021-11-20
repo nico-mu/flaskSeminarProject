@@ -33,4 +33,14 @@ messageTwo = Message(payload="Hello World back!", sender=luca.id, receiver=nico.
 messageThree = Message(payload="Private Message", sender=luca.id, receiver=nico.id, timestamp=datetime.now())
 db.session.add_all([messageOne, messageTwo, messageThree])
 db.session.commit()
+
+serverOne = Server.query.filter_by(name='serverOne').first()
+for index in range(1, 100):
+    user = User(name='User' + str(index), password="12345")
+    server = Server(name='Server' + str(index), status=True)
+    serverOne.members.append(user)
+    db.session.add(user)
+    db.session.add(server)
+db.session.add(serverOne)
+db.session.commit()
 print("Database populated")

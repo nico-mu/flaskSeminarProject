@@ -30,7 +30,6 @@ def about():
 
 @app.route("/users", methods=["GET"])
 @flask_login.login_required
-@admin_permission.require(http_exception=403)
 def users():
     '''
     This function renders the users.html.j2 template
@@ -142,7 +141,6 @@ def logout():
 
 @app.route('/server')
 @flask_login.login_required
-@admin_permission.require(http_exception=403)
 def server():
     '''
     This function renders the servers.html.j2 template
