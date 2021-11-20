@@ -1,3 +1,4 @@
+from wtforms.fields.numeric import IntegerField
 from demo.models import User
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, BooleanField, PasswordField
@@ -37,3 +38,16 @@ class AddUserForm(FlaskForm):
     name = StringField('Name')
     password = StringField('Password')
     admin = BooleanField('Admin')
+
+class RemoveServerForm(FlaskForm):
+    submit = SubmitField('Remove Server')
+
+class AddServerForm(FlaskForm):
+    def validate_owner(self, owner):
+        user = User.query.filter_by(id=owner.data).first()
+        if not user:
+            raise ValidationError('User does not exist. Choose an existing User as the Owner.')
+    submit = SubmitField('Add Server')
+    name = StringField('Name')
+    owner = IntegerField('Owner')
+    status = BooleanField('Status')

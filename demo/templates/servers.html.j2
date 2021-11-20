@@ -1,0 +1,39 @@
+{% extends 'base.html.j2' %}
+
+{% block title %}
+    Servers Page
+{% endblock %}
+
+{% block content %}
+    <!-- Jinja2 value access from flask-->
+    <table class="table table-hover table-light">
+    <thead>
+        <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Owner ID</th>
+        <th scope="col">Status</th>
+        <th scope="col">Options</th>
+        </tr>
+    </thead>
+    <thead>
+        <!-- Jinja2 logic access for loop-->
+        {% for server in servers %}
+        {% include 'includes/server_modals.html.j2' %}
+        <tr>
+        <!-- Jinja2 access iterator values where iterator is a dict-->
+        <td>{{ server.id }}</td>
+        <td>{{ server.name }}</td>
+        <td>{{ server.owner }}</td>
+        <td>{{ server.status }}</td>
+        
+        <td>
+            <button class="btn btn-outline-info" data-toggle="modal" data-target="#serverInfoModal-{{ server.id }}">More Info</button>
+            <button class="btn btn-outline-danger" data-toggle="modal" data-target="#removeServerModal-{{ server.id }}">Remove</button>
+        </td>
+        </tr>
+        {% endfor %}
+    </thead>
+    </table>
+    <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addServerModal">Add Server</button>
+{% endblock %}

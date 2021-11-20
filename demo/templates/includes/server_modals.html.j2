@@ -1,0 +1,83 @@
+<!-- server Info Modal -->
+<div class="modal fade" id="serverInfoModal-{{ server.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Info for {{ server.name }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>id : {{ server.id }}</p>
+        <p>name : {{ server.name }}</p>
+        <p>owner : {{ server.owner }}</p>
+        <p>status : {{ server.status }}</p>
+        <p>member : {{ server.members }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Remove server Modal -->
+<div class="modal fade" id="removeServerModal-{{ server.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Remove {{ server.name }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{{ url_for('removeServer') }}">
+          {{ removeServerForm.hidden_tag() }}
+          <input id="removeServer" name="removeServer" type="hidden" value="{{ server.id }}">
+          <h4 class="text-center">
+            Do you really want to remove {{ server.name }}?
+          </h4>
+          {{ removeServerForm.submit(class="btn btn-outline-danger btn-block") }}
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add server Modal -->
+<div class="modal fade" id="addServerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add new server</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{{ url_for('addServer') }}">
+          {{ addServerForm.hidden_tag() }}
+          <input id="addserver" name="addserver" type="hidden" value="addserver">
+          {{ addServerForm.name.label() }}
+          {{ addServerForm.name(class="form-control", placeholder="Server Name") }}
+
+          {{ addServerForm.owner.label() }}
+          {{ addServerForm.owner(class="form-control", placeholder="Owner ID") }}
+          <br>
+          {{ addServerForm.status.label() }}
+          {{ addServerForm.status() }}
+          <br>
+          {{ addServerForm.submit(class="btn btn-outline-danger btn-block") }}
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

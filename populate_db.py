@@ -19,6 +19,7 @@ serverTwo = Server.query.filter_by(name='serverTwo').first()
 serverOne.owner = nico.id
 serverOne.members.append(nico)
 serverOne.members.append(luca)
+serverTwo.owner = luca.id
 serverTwo.members.append(luca)
 db.session.add_all([serverOne, serverTwo])
 db.session.commit()

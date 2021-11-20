@@ -8,7 +8,7 @@ from flask import send_from_directory, redirect, url_for, flash, request
 import flask_login
 from demo import app, db
 from demo.models import *
-from demo.forms import AddUserForm, RegisterForm, LoginForm, RemoveUserForm
+from demo.forms import AddServerForm, AddUserForm, RegisterForm, LoginForm, RemoveServerForm, RemoveUserForm
 
 @app.route("/")
 @app.route("/home")
@@ -102,7 +102,7 @@ def register():
         return redirect(url_for('index'))
     if form.errors:
         for error in form.errors.values():
-            flash(error[0])
+            flash(error[0], category='danger')
     return render_template('register.html.j2', form=form)
 
 # Cross Site Request Forgery (CSRF) protection needed in register.html.j2 and login.html.j2 by adding {{ form.hidden_tag() }}
@@ -115,7 +115,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(name=form.username.data).first()
         if user is None or not user.verify_password(form.password.data):
-            flash('Invalid username or password', category='error')
+            flash('Invalid username or password', category='danger')
             return redirect(url_for('login'))
         # show an alert message
         flask_login.login_user(user)
@@ -132,3 +132,51 @@ def logout():
     flask_login.logout_user()
     flash('User successfully logged out', category='success')
     return redirect(url_for('index'))
+
+@app.route('/server')
+@flask_login.login_required
+def server():
+    '''
+    This function renders the servers.html.j2 template
+    '''
+    return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=AddServerForm(), removeServerForm=RemoveServerForm())
+
+@app.route('/removeServer', methods=['GET', 'POST'])
+@flask_login.login_required
+def removeServer():
+    '''
+    Subroute of server. This funtions handles removing server.
+    '''
+    addServerForm = AddServerForm()
+    removeServerForm = RemoveServerForm()
+    if request.method == "POST":
+        server = Server.query.filter_by(id=request.form.get("removeServer")).first()
+        db.session.delete(server)
+        db.session.commit()
+        flash("Server deleted successfully!", "success")
+        return redirect(url_for("server"))
+    return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=addServerForm, removeServerForm=removeServerForm)
+
+@app.route('/addServer', methods=['GET', 'POST'])
+@flask_login.login_required
+def addServer():
+    '''
+    Subroute of server. This funtions handles adding server.
+    '''
+    addServerForm = AddServerForm()
+    removeServerForm = RemoveServerForm()
+    if request.method == "POST" and addServerForm.validate_on_submit():
+        name = request.form.get("name")
+        owner = request.form.get("owner")
+        status = request.form.get("status")
+        if status == "y":
+            status = True
+        server = Server(name=name, owner=owner, status=status)
+        db.session.add(server)
+        db.session.commit()
+        flash("Server added successfully!", "success")
+        return redirect(url_for("server"))
+    if addServerForm.errors:
+        for error in addServerForm.errors.values():
+            flash(error[0], category='danger')
+    return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=addServerForm, removeServerForm=removeServerForm)
