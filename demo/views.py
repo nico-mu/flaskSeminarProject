@@ -4,9 +4,10 @@ Contains the views for the application.
 '''
 import os
 from flask.templating import render_template
-from flask import send_from_directory, redirect, url_for, flash, request
+from flask import send_from_directory, redirect, url_for, flash, request, current_app
 import flask_login
-from demo import app, db
+from flask_principal import AnonymousIdentity, Identity, identity_changed
+from demo import app, db, admin_permission
 from demo.models import *
 from demo.forms import AddServerForm, AddUserForm, JoinServerForm, RegisterForm, LoginForm, RemoveServerForm, RemoveUserForm
 
@@ -29,6 +30,7 @@ def about():
 
 @app.route("/users", methods=["GET"])
 @flask_login.login_required
+@admin_permission.require(http_exception=403)
 def users():
     '''
     This function renders the users.html.j2 template
@@ -40,6 +42,7 @@ def users():
 
 @app.route("/users/removeUser", methods=["GET", "POST"])
 @flask_login.login_required
+@admin_permission.require(http_exception=403)
 def removeUser():
     '''
     Subroute of users. This funtions handles removing users.
@@ -57,6 +60,7 @@ def removeUser():
 
 @app.route("/users/addUser", methods=["GET", "POST"])
 @flask_login.login_required
+@admin_permission.require(http_exception=403)
 def addUser():
     '''
     Subroute of users. This funtions handles adding users.
@@ -119,22 +123,26 @@ def login():
             return redirect(url_for('login'))
         # show an alert message
         flask_login.login_user(user)
+        identity_changed.send(current_app._get_current_object(), identity=Identity(user.id))
         flash('User successfully logged in', category='success')
         return redirect(url_for('index'))
     return render_template('login.html.j2', form=form)
 
 @app.route('/logout', methods=['GET', 'POST'])
+@flask_login.login_required
 def logout():
     '''
     This function logs out the user
     '''
     # show an alert message
     flask_login.logout_user()
+    identity_changed.send(current_app._get_current_object(), identity=AnonymousIdentity())
     flash('User successfully logged out', category='success')
     return redirect(url_for('index'))
 
 @app.route('/server')
 @flask_login.login_required
+@admin_permission.require(http_exception=403)
 def server():
     '''
     This function renders the servers.html.j2 template
@@ -143,6 +151,7 @@ def server():
 
 @app.route('/server/remove', methods=['GET', 'POST'])
 @flask_login.login_required
+@admin_permission.require(http_exception=403)
 def removeServer():
     '''
     Subroute of server. This funtions handles removing server.
@@ -160,6 +169,7 @@ def removeServer():
 
 @app.route('/server/add', methods=['GET', 'POST'])
 @flask_login.login_required
+@admin_permission.require(http_exception=403)
 def addServer():
     '''
     Subroute of server. This funtions handles adding server.
@@ -185,6 +195,7 @@ def addServer():
 
 @app.route('/server/join', methods=['GET', 'POST'])
 @flask_login.login_required
+@admin_permission.require(http_exception=403)
 def joinServer():
     '''
     Subroute of server. This funtions handles adding users to a server.
