@@ -49,5 +49,13 @@ class AddServerForm(FlaskForm):
             raise ValidationError('User does not exist. Choose an existing User as the Owner.')
     submit = SubmitField('Add Server')
     name = StringField('Name')
-    owner = IntegerField('Owner')
+    owner = IntegerField('Owner ID')
     status = BooleanField('Status')
+
+class JoinServerForm(FlaskForm):
+    def validate_user(self, to_join):
+        check = User.query.filter_by(id=to_join.data).first()
+        if not check:
+            raise ValidationError('User does not exist. Choose an existing User to join the server.')
+    submit = SubmitField('Join Server')
+    user = IntegerField('User ID')

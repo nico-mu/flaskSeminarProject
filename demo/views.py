@@ -8,7 +8,7 @@ from flask import send_from_directory, redirect, url_for, flash, request
 import flask_login
 from demo import app, db
 from demo.models import *
-from demo.forms import AddServerForm, AddUserForm, RegisterForm, LoginForm, RemoveServerForm, RemoveUserForm
+from demo.forms import AddServerForm, AddUserForm, JoinServerForm, RegisterForm, LoginForm, RemoveServerForm, RemoveUserForm
 
 @app.route("/")
 @app.route("/home")
@@ -139,7 +139,7 @@ def server():
     '''
     This function renders the servers.html.j2 template
     '''
-    return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=AddServerForm(), removeServerForm=RemoveServerForm())
+    return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=AddServerForm(), removeServerForm=RemoveServerForm(), joinServerForm=JoinServerForm())
 
 @app.route('/removeServer', methods=['GET', 'POST'])
 @flask_login.login_required
@@ -149,13 +149,14 @@ def removeServer():
     '''
     addServerForm = AddServerForm()
     removeServerForm = RemoveServerForm()
+    joinServerForm = JoinServerForm()
     if request.method == "POST":
         server = Server.query.filter_by(id=request.form.get("removeServer")).first()
         db.session.delete(server)
         db.session.commit()
         flash("Server deleted successfully!", "success")
         return redirect(url_for("server"))
-    return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=addServerForm, removeServerForm=removeServerForm)
+    return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=addServerForm, removeServerForm=removeServerForm, joinServerForm=joinServerForm)
 
 @app.route('/addServer', methods=['GET', 'POST'])
 @flask_login.login_required
@@ -165,6 +166,7 @@ def addServer():
     '''
     addServerForm = AddServerForm()
     removeServerForm = RemoveServerForm()
+    joinServerForm = JoinServerForm()
     if request.method == "POST" and addServerForm.validate_on_submit():
         name = request.form.get("name")
         owner = request.form.get("owner")
@@ -179,4 +181,27 @@ def addServer():
     if addServerForm.errors:
         for error in addServerForm.errors.values():
             flash(error[0], category='danger')
-    return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=addServerForm, removeServerForm=removeServerForm)
+    return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=addServerForm, removeServerForm=removeServerForm, joinServerForm=joinServerForm)
+
+@app.route('/joinServer', methods=['GET', 'POST'])
+@flask_login.login_required
+def joinServer():
+    '''
+    Subroute of server. This funtions handles adding users to a server.
+    '''
+    addServerForm = AddServerForm()
+    removeServerForm = RemoveServerForm()
+    joinServerForm = JoinServerForm()
+    if request.method == "POST" and joinServerForm.validate_on_submit():
+        userId = request.form.get("user")
+        serverId = request.form.get("serverId")
+        user = User.query.filter_by(id=userId).first()
+        server = Server.query.filter_by(id=serverId).first()
+        user.servers.append(server)
+        db.session.commit()
+        flash("User successfully added to server!", "success")
+        return redirect(url_for("server"))
+    if joinServerForm.errors:
+        for error in joinServerForm.errors.values():
+            flash(error[0], category='danger')
+    return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=addServerForm, removeServerForm=removeServerForm, joinServerForm=joinServerForm)
