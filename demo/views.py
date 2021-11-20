@@ -141,7 +141,7 @@ def server():
     '''
     return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=AddServerForm(), removeServerForm=RemoveServerForm(), joinServerForm=JoinServerForm())
 
-@app.route('/removeServer', methods=['GET', 'POST'])
+@app.route('/server/remove', methods=['GET', 'POST'])
 @flask_login.login_required
 def removeServer():
     '''
@@ -158,7 +158,7 @@ def removeServer():
         return redirect(url_for("server"))
     return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=addServerForm, removeServerForm=removeServerForm, joinServerForm=joinServerForm)
 
-@app.route('/addServer', methods=['GET', 'POST'])
+@app.route('/server/add', methods=['GET', 'POST'])
 @flask_login.login_required
 def addServer():
     '''
@@ -183,7 +183,7 @@ def addServer():
             flash(error[0], category='danger')
     return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=addServerForm, removeServerForm=removeServerForm, joinServerForm=joinServerForm)
 
-@app.route('/joinServer', methods=['GET', 'POST'])
+@app.route('/server/join', methods=['GET', 'POST'])
 @flask_login.login_required
 def joinServer():
     '''
