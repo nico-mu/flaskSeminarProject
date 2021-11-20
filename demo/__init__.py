@@ -2,8 +2,13 @@
 '''
 Main Module for the app
 '''
-# Versions  Python   3.8.10
-#           Flask    2.0.2
+# Versions  Python              3.8.10
+#           Flask               2.0.2
+#           flask_sqlalchemy    2.5.1
+#           flask-wtf           1.0.0
+#           wtforms             3.0.0
+#           flask_bcrypt        0.7.1
+#           flask_login         0.5.0
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
