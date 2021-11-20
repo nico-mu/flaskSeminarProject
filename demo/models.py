@@ -31,6 +31,7 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(length=60), nullable=False)
     servers = db.relationship('Server', secondary=association_table,
         back_populates="members")
+    admin = db.Column(db.Boolean, default=False)
 
     @property
     def password(self):

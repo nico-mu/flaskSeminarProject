@@ -3,7 +3,7 @@ from demo import db
 from demo.models import User, Server, Message
 from datetime import datetime
 
-nico = User(name='Nico', password="12345")
+nico = User(name='Nico', password="12345", admin=True)
 luca = User(name='Luca', password="123")
 serverOne = Server(name='serverOne', status=False)
 serverTwo = Server(name='serverTwo', status=True)
