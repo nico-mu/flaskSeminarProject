@@ -2,8 +2,9 @@
 '''
 Contains all the models for the application
 '''
-from demo import db, bycrypt, login_manager
 from flask_login import UserMixin
+
+from demo import bycrypt, db, login_manager
 
 # Association table for many-to-many relationship between users and servers
 association_table = db.Table('association', db.Model.metadata,

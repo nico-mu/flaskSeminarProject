@@ -3,13 +3,18 @@
 Contains the views for the application.
 '''
 import os
-from flask.templating import render_template
-from flask import send_from_directory, redirect, url_for, flash, request, current_app
+
 import flask_login
+from flask import (current_app, flash, redirect, request, send_from_directory,
+                   url_for)
+from flask.templating import render_template
 from flask_principal import AnonymousIdentity, Identity, identity_changed
-from demo import app, db, admin_permission
+
+from demo import admin_permission, app, db
+from demo.forms import (AddServerForm, AddUserForm, JoinServerForm, LoginForm,
+                        RegisterForm, RemoveServerForm, RemoveUserForm)
 from demo.models import *
-from demo.forms import AddServerForm, AddUserForm, JoinServerForm, RegisterForm, LoginForm, RemoveServerForm, RemoveUserForm
+
 
 @app.route("/")
 @app.route("/home")

@@ -1,8 +1,9 @@
-from wtforms.fields.numeric import IntegerField
-from demo.models import User
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, BooleanField, PasswordField
-from wtforms.validators import Length, EqualTo, DataRequired, ValidationError
+from wtforms import BooleanField, PasswordField, StringField, SubmitField
+from wtforms.fields.numeric import IntegerField
+from wtforms.validators import DataRequired, EqualTo, Length, ValidationError
+
+from demo.models import User
 
 
 class RegisterForm(FlaskForm):
