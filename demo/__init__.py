@@ -40,4 +40,5 @@ add import statements here to avoid circular imports
 #pylint: disable=wrong-import-position
 import demo.views
 import demo.models
+import demo.api
 #pylint: enable=wrong-import-position

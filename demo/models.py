@@ -53,6 +53,26 @@ class User(db.Model, UserMixin):
         '''
         return bycrypt.check_password_hash(self.password_hash, password)
 
+    def getAll():
+        '''
+        Get all users
+        Used by the API to get all users GET /api/user
+        '''
+        buffer = []
+        for user in User.query.all():
+            buffer.append(User.get(user.id))
+        return { "data" : buffer }
+
+    def get(userId):
+        '''
+        Get a user by id
+        Used by the API to get a user GET /api/user/<id>
+        '''
+        user = User.query.get(userId)
+        if user:
+            return { "id" :  user.id, "name" : user.name, "admin" : user.admin, "servers" : [server.id for server in user.servers] }
+        return {}
+
     def __repr__(self):
         return f'<User {self.name}>'
 
@@ -67,6 +87,26 @@ class Server(db.Model):
     status = db.Column(db.Boolean, nullable=False)
     members = db.relationship('User', secondary=association_table, back_populates='servers')
 
+    def getAll():
+        '''
+        Get all users
+        Used by the API to get all users GET /api/user
+        '''
+        buffer = []
+        for server in Server.query.all():
+            buffer.append(Server.get(server.id))
+        return { "data" : buffer }
+
+    def get(serverId):
+        '''
+        Get a user by id
+        Used by the API to get a user GET /api/user/<id>
+        '''
+        server = Server.query.get(serverId)
+        if server:
+            return { "id" :  server.id, "name" : server.name, "owner" : server.owner, "status" : server.status , "members" : [member.id for member in server.members] }
+        return {}
+
     def __repr__(self):
         return f'<Server {self.name}>'
 
@@ -79,5 +119,28 @@ class Message(db.Model):
     payload = db.Column(db.String(length=256), nullable=False)
     sender = db.Column(db.Integer(), db.ForeignKey('user.id'), nullable=False)
     receiver = db.Column(db.Integer(), db.ForeignKey('user.id'), nullable=False)
-    timestamp = db.Column(db.DateTime, nullable=False)
+    timestamp = db.Column(db.Integer(), nullable=False)
     server = db.Column(db.Integer(), db.ForeignKey('server.id'))
+
+    def getAll():
+        '''
+        Get all messages
+        Used by the API to get all messages GET /api/message
+        '''
+        buffer = []
+        for message in Message.query.all():
+            buffer.append(Message.get(message.id))
+        return { "data" : buffer }
+
+    def get(messageId):
+        '''
+        Get a message by id
+        Used by the API to get a message GET /api/message/<id>
+        '''
+        message = Message.query.get(messageId)
+        if message:
+            return { "id" :  message.id, "payload" : message.payload, "sender" : message.sender, "receiver" : message.receiver, "timestamp" : message.timestamp, "server" : message.server }
+        return {}
+
+    def __repr__(self):
+        return f'<Message {self.id}>'
