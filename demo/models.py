@@ -32,6 +32,8 @@ class User(db.Model, UserMixin):
     servers = db.relationship('Server', secondary=association_table,
         back_populates="members")
     admin = db.Column(db.Boolean, default=False)
+    token = db.Column(db.String(length=36), unique=True)
+    online = db.Column(db.Boolean, default=False)
 
     @property
     def password(self):
@@ -70,8 +72,14 @@ class User(db.Model, UserMixin):
         '''
         user = User.query.get(userId)
         if user:
-            return { "id" :  user.id, "name" : user.name, "admin" : user.admin, "servers" : [server.id for server in user.servers] }
+            return { "id" :  user.id, "name" : user.name, "admin" : user.admin, "servers" : [server.id for server in user.servers], "online" : user.online }
         return {}
+
+    def getByName(name):
+        return User.query.filter_by(name=name).first()
+
+    def getByToken(token):
+        return User.query.filter_by(token=token).first()
 
     def __repr__(self):
         return f'<User {self.name}>'
