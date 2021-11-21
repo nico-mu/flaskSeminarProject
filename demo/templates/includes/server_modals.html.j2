@@ -13,7 +13,11 @@
         <p>name : {{ server.name }}</p>
         <p>owner : {{ server.owner }}</p>
         <p>status : {{ server.status }}</p>
-        <p>member : {{ server.members }}</p>
+        <p>member : [
+          {% for x in server.members %}
+            {{ x.id }}, 
+          {% endfor %} 
+        ]</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

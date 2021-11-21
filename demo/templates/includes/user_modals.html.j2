@@ -13,7 +13,11 @@
         <p>name : {{ user.name }}</p>
         <p>password_hash : {{ user.password_hash }}</p>
         <p>admin : {{ user.admin }}</p>
-        <p>servers: {{ user.servers }}</p>
+        <p>servers: [
+        {% for x in user.servers %}
+          {{ x.id }},  
+        {% endfor %}
+        ]</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
