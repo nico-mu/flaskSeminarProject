@@ -14,6 +14,7 @@ setup(
         'flask-wtf',
         'wtforms',
         'flask_bcrypt',
-        'flask_login'
+        'flask_login',
+        'flask_principal'
     ],
 )

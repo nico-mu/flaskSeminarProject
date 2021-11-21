@@ -1,9 +1,10 @@
 import uuid
+
+from flask import request
 from flask.wrappers import Response
+
 from demo import app, db
 from demo.models import *
-from flask import jsonify, request
-from flask.typing import StatusCode
 
 
 @app.get('/api/user')
