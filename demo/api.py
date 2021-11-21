@@ -98,3 +98,47 @@ def post_logout():
             db.session.commit()
             return Response(str({'status': 'OK'}), status=200, mimetype='application/json')
     return Response(str({'error': 'Invalid session token'}), status=401, mimetype='application/json')
+
+@app.post('/api/server/join/<int:serverId>')
+def post_server_join(serverId):
+    '''
+    Join a server
+    Body:
+        {
+            "uuid" : String
+        }
+    '''
+    data = request.get_json()
+    token = data.get("uuid")
+    if token:
+        user = User.getByToken(token)
+        if user:
+            server = Server.query.get(serverId)
+            if server:
+                server.members.append(user)
+                db.session.add(server)
+                db.session.commit()
+                return Response(str({'status': 'OK'}), status=200, mimetype='application/json')
+    return Response(str({'error': 'Invalid session token'}), status=401, mimetype='application/json')
+
+@app.post('/api/server/leave/<int:serverId>')
+def post_server_leave(serverId):
+    '''
+    Leave a server
+    Body:
+        {
+            "uuid" : String
+        }
+    '''
+    data = request.get_json()
+    token = data.get("uuid")
+    if token:
+        user = User.getByToken(token)
+        if user:
+            server = Server.query.get(serverId)
+            if server:
+                server.members.remove(user)
+                db.session.add(server)
+                db.session.commit()
+                return Response(str({'status': 'OK'}), status=200, mimetype='application/json')
+    return Response(str({'error': 'Invalid session token'}), status=401, mimetype='application/json')
