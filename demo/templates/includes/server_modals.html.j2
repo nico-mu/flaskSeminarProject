@@ -9,12 +9,17 @@
         </button>
       </div>
       <div class="modal-body">
-        <p>id : {{ server.id }}</p>
-        <p>name : {{ server.name }}</p>
-        <p>owner : {{ server.owner }}</p>
-        <p>status : {{ server.status }}</p>
-        <p>member : [
+        <p style="word-wrap: break-word">id : {{ server.id }}</p>
+        <p style="word-wrap: break-word">name : {{ server.name }}</p>
+        <p style="word-wrap: break-word">owner id : {{ server.owner_id }}</p>
+        <p style="word-wrap: break-word">status : {{ server.status }}</p>
+        <p style="word-wrap: break-word">member ids : [
           {% for x in server.members %}
+            {{ x.id }}, 
+          {% endfor %} 
+        ]</p>
+        <p style="word-wrap: break-word">message ids : [
+          {% for x in server.messages %}
             {{ x.id }}, 
           {% endfor %} 
         ]</p>

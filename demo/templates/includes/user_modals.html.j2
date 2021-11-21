@@ -9,11 +9,11 @@
         </button>
       </div>
       <div class="modal-body">
-        <p>id : {{ user.id }}</p>
-        <p>name : {{ user.name }}</p>
-        <p>password_hash : {{ user.password_hash }}</p>
-        <p>admin : {{ user.admin }}</p>
-        <p>servers: [
+        <p style="word-wrap: break-word">id : {{ user.id }}</p>
+        <p style="word-wrap: break-word">name : {{ user.name }}</p>
+        <p style="word-wrap: break-word">password_hash : {{ user.password_hash }}</p>
+        <p style="word-wrap: break-word">admin : {{ user.admin }}</p>
+        <p style="word-wrap: break-word">servers: [
         {% for x in user.servers %}
           {{ x.id }},  
         {% endfor %}

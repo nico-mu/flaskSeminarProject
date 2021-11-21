@@ -92,9 +92,10 @@ class Server(db.Model):
     __tablename__ = 'server'
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(length=16), unique=True, nullable=False)
-    owner = db.Column(db.Integer(), db.ForeignKey('user.id'))
+    owner_id = db.Column(db.Integer(), nullable=False)
     status = db.Column(db.Boolean, nullable=False)
     members = db.relationship('User', secondary=association_table, back_populates='servers')
+    messages = db.relationship("Message", back_populates="server")
 
     def getAll():
         '''
@@ -126,10 +127,11 @@ class Message(db.Model):
     __tablename__ = 'message'
     id = db.Column(db.Integer(), primary_key=True)
     payload = db.Column(db.String(length=256), nullable=False)
-    sender = db.Column(db.Integer(), db.ForeignKey('user.id'), nullable=False)
-    receiver = db.Column(db.Integer(), db.ForeignKey('user.id'), nullable=False)
+    sender_id = db.Column(db.Integer(), db.ForeignKey('user.id'), nullable=False)
+    receiver_id = db.Column(db.Integer(), db.ForeignKey('user.id'), nullable=False)
     timestamp = db.Column(db.Integer(), nullable=False)
-    server = db.Column(db.Integer(), db.ForeignKey('server.id'))
+    server_id = db.Column(db.Integer(), db.ForeignKey('server.id'))
+    server = db.relationship("Server", back_populates="messages")
 
     def getAll():
         '''
