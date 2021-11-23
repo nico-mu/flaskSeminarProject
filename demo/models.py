@@ -114,7 +114,7 @@ class Server(db.Model):
         '''
         server = Server.query.get(serverId)
         if server:
-            return { "id" :  server.id, "name" : server.name, "owner" : server.owner, "status" : server.status , "members" : [member.id for member in server.members] }
+            return { "id" :  server.id, "name" : server.name, "owner_id" : server.owner_id, "status" : server.status , "members" : [member.id for member in server.members] }
         return {}
 
     def __repr__(self):
