@@ -54,6 +54,23 @@ def get_message(messageId):
     '''
     return Message.get(messageId)
 
+@app.post('/api/register')
+def post_register():
+    '''
+    Register a new user
+    Body:
+        {
+            "name" : String,
+            "password" : String
+        }
+    '''
+    data = request.get_json()
+    name = data.get("name")
+    password = data.get("password")
+    user = User(name=name, password=password)
+    db.session.add(user)
+    db.session.commit()
+    return Response(status=200, mimetype='application/json')
 
 @app.post('/api/login')
 def post_login():
