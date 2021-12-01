@@ -29,7 +29,7 @@ crossorigin="anonymous"
         });
 
         socket.on('message', function(data) {
-            $('#messages').append($('<li class="list-group-item">').text(username + " : " + data));
+            $('#messages').append($('<li class="list-group-item">').text(data));
         });
 
         $('#sendMessage').click(function() {

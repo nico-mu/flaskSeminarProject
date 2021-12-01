@@ -6,7 +6,7 @@ import flask_login
 '''
 @socket.on("message")
 def handleMessage(msg):
-    socket.send(msg, broadcast=True)
     message = models.Message(payload=msg, timestamp=db.func.now(), sender_id=flask_login.current_user.get_id(), receiver_id=-1, sender_name=flask_login.current_user.name)
+    socket.send(message.sender_name + " : " + message.payload , broadcast=True)
     db.session.add(message)
     db.session.commit()
