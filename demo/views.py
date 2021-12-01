@@ -15,14 +15,13 @@ from demo.forms import (AddServerForm, AddUserForm, JoinServerForm, LoginForm,
                         RegisterForm, RemoveServerForm, RemoveUserForm)
 from demo.models import *
 
-
 @app.route("/")
 @app.route("/home")
 def index():
     '''
     This function renders the index.j2 template
     '''
-    return render_template("index.j2")
+    return render_template("index.j2", isAdmin=admin_permission.can())
 
 
 @app.route("/about")
@@ -30,11 +29,12 @@ def about():
     '''
     This function renders the about.j2 template
     '''
-    return render_template("about.j2")
+    return render_template("about.j2", isAdmin=admin_permission.can())
 
 
 @app.route("/users", methods=["GET"])
 @flask_login.login_required
+@admin_permission.require(http_exception=403)
 def users():
     '''
     This function renders the users.html.j2 template
@@ -42,7 +42,7 @@ def users():
     addUserForm = AddUserForm()
     removeUserForm = RemoveUserForm()
     users = User.query.all()
-    return render_template('users.html.j2', users=users, removeUserForm=removeUserForm, addUserForm=addUserForm)
+    return render_template('users.html.j2', users=users, removeUserForm=removeUserForm, addUserForm=addUserForm, isAdmin=admin_permission.can())
 
 @app.route("/users/removeUser", methods=["GET", "POST"])
 @flask_login.login_required
@@ -60,7 +60,7 @@ def removeUser():
         flash("User deleted successfully!", "success")
         return redirect(url_for("users"))
     users = User.query.all()
-    return render_template('users.html.j2', users=users, removeUserForm=removeUserForm, addUserForm=addUserForm)
+    return render_template('users.html.j2', users=users, removeUserForm=removeUserForm, addUserForm=addUserForm, isAdmin=admin_permission.can())
 
 @app.route("/users/addUser", methods=["GET", "POST"])
 @flask_login.login_required
@@ -83,7 +83,7 @@ def addUser():
         flash("User added successfully!", "success")
         return redirect(url_for("users"))
     users = User.query.all()
-    return render_template('users.html.j2', users=users, removeUserForm=removeUserForm, addUserForm=addUserForm)
+    return render_template('users.html.j2', users=users, removeUserForm=removeUserForm, addUserForm=addUserForm, isAdmin=admin_permission.can())
 
 @app.route('/favicon.ico')
 def favicon():
@@ -111,7 +111,7 @@ def register():
     if form.errors:
         for error in form.errors.values():
             flash(error[0], category='danger')
-    return render_template('register.html.j2', form=form)
+    return render_template('register.html.j2', form=form, isAdmin=admin_permission.can())
 
 # Cross Site Request Forgery (CSRF) protection needed in register.html.j2 and login.html.j2 by adding {{ form.hidden_tag() }}
 @app.route('/login', methods=['GET', 'POST'])
@@ -130,7 +130,7 @@ def login():
         identity_changed.send(current_app._get_current_object(), identity=Identity(user.id))
         flash('User successfully logged in', category='success')
         return redirect(url_for('index'))
-    return render_template('login.html.j2', form=form)
+    return render_template('login.html.j2', form=form, isAdmin=admin_permission.can())
 
 @app.route('/logout', methods=['GET', 'POST'])
 @flask_login.login_required
@@ -146,11 +146,12 @@ def logout():
 
 @app.route('/server')
 @flask_login.login_required
+@admin_permission.require(http_exception=403)
 def server():
     '''
     This function renders the servers.html.j2 template
     '''
-    return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=AddServerForm(), removeServerForm=RemoveServerForm(), joinServerForm=JoinServerForm())
+    return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=AddServerForm(), removeServerForm=RemoveServerForm(), joinServerForm=JoinServerForm(), isAdmin=admin_permission.can())
 
 @app.route('/chat')
 @flask_login.login_required
@@ -158,7 +159,7 @@ def chat():
     '''
     This function renders the chat.html template
     '''
-    return render_template('chat.html.j2', messages=Message.query.all())
+    return render_template('chat.html.j2', messages=Message.query.all(), isAdmin=admin_permission.can())
 
 @app.route('/server/remove', methods=['GET', 'POST'])
 @flask_login.login_required
@@ -176,7 +177,7 @@ def removeServer():
         db.session.commit()
         flash("Server deleted successfully!", "success")
         return redirect(url_for("server"))
-    return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=addServerForm, removeServerForm=removeServerForm, joinServerForm=joinServerForm)
+    return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=addServerForm, removeServerForm=removeServerForm, joinServerForm=joinServerForm, isAdmin=admin_permission.can())
 
 @app.route('/server/add', methods=['GET', 'POST'])
 @flask_login.login_required
@@ -202,7 +203,7 @@ def addServer():
     if addServerForm.errors:
         for error in addServerForm.errors.values():
             flash(error[0], category='danger')
-    return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=addServerForm, removeServerForm=removeServerForm, joinServerForm=joinServerForm)
+    return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=addServerForm, removeServerForm=removeServerForm, joinServerForm=joinServerForm, isAdmin=admin_permission.can())
 
 @app.route('/server/join', methods=['GET', 'POST'])
 @flask_login.login_required
@@ -226,4 +227,4 @@ def joinServer():
     if joinServerForm.errors:
         for error in joinServerForm.errors.values():
             flash(error[0], category='danger')
-    return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=addServerForm, removeServerForm=removeServerForm, joinServerForm=joinServerForm)
+    return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=addServerForm, removeServerForm=removeServerForm, joinServerForm=joinServerForm, isAdmin=admin_permission.can())
