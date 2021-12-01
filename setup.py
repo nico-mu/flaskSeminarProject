@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''
-Setup script for the package. Just use 'python setup.py install' to install
+Setup script for the package. Just use 'python setup.py install' to install on windows or 'pip3 install .' else.
 '''
 from setuptools import setup
 
