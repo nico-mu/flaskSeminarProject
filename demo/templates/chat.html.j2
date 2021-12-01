@@ -39,23 +39,43 @@ crossorigin="anonymous"
                 $('#inputMessage').val('');
             }
         });
+    }).keypress(function(e) {
+        if (e.which == 13) {
+            $('#sendMessage').click();
+        }
     });
 </script>
 <body>
-    <div><h1 class="display-3">Chat</h1></div>
-    <div id="messages" class="container-fluid">
-        <ul id="messages" class="list-group list-group-flush">
-            {% for message in messages %}
-                <li class="list-group-item">{{ message.sender_name }} : {{ message.payload }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="container-fluid">
-        <div class="input-group mb-3">
-        <div class="input-group-prepend">
-            <button class="btn btn-outline-secondary" type="button" id="sendMessage">Send</button>
+    <style>
+        .my-custom-scrollbar {
+        position: relative;
+        overflow: auto;
+        height: 80%;
+        }
+        .table-wrapper-scroll-y {
+        display: block;
+        }
+        .div-wrapper {
+        max-height: 100vh;
+        overflow: auto;
+        }
+    </style>
+    <div class="div-wrapper">
+        <div><h1 class="display-3">Chat</h1></div>
+        <div id="messages" class="container-fluid table-wrapper-scroll-y my-custom-scrollbar">
+            <ul id="messages" class="list-group list-group-flush">
+                {% for message in messages %}
+                    <li class="list-group-item">{{ message.sender_name }} : {{ message.payload }}</li>
+                {% endfor %}
+            </ul>
         </div>
-            <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1" id="inputMessage">
+        <div class="container-fluid">
+            <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <button class="btn btn-outline-secondary" type="button" id="sendMessage">Send</button>
+            </div>
+                <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1" id="inputMessage">
+            </div>
         </div>
     </div>
 </body>
