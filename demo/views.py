@@ -152,6 +152,14 @@ def server():
     '''
     return render_template('servers.html.j2', servers=Server.query.all(), addServerForm=AddServerForm(), removeServerForm=RemoveServerForm(), joinServerForm=JoinServerForm())
 
+@app.route('/chat')
+@flask_login.login_required
+def chat():
+    '''
+    This function renders the chat.html template
+    '''
+    return render_template('chat.html.j2', username=User.query.filter_by(id=flask_login.current_user.get_id()).first().name, messages=Message.query.all())
+
 @app.route('/server/remove', methods=['GET', 'POST'])
 @flask_login.login_required
 @admin_permission.require(http_exception=403)

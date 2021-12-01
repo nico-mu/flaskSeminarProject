@@ -2,7 +2,7 @@
 '''
 start the server
 '''
-from demo import app
+from demo import app, socket
 
 if __name__ == "__main__":
-    app.run(debug = True)
+    socket.run(app)

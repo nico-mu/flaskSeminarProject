@@ -15,6 +15,8 @@ setup(
         'wtforms',
         'flask_bcrypt',
         'flask_login',
-        'flask_principal'
+        'flask_principal',
+        'flask-socketio',
+        'eventlet'
     ],
 )

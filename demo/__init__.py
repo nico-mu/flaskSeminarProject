@@ -10,12 +10,15 @@ Main Module for the app
 #           flask_bcrypt        0.7.1
 #           flask_login         0.5.0
 #           flask-principal     0.4.0
+#           flask-socketio      5.1.1
+#           eventlet            0.33.0
 
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_principal import Permission, Principal, RoleNeed, identity_loaded
 from flask_sqlalchemy import SQLAlchemy
+from flask_socketio import SocketIO
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -27,8 +30,10 @@ app.url_map.strict_slashes = False
 db = SQLAlchemy(app)
 bycrypt = Bcrypt(app)
 principals = Principal(app)
-admin_permission = Permission(RoleNeed('admin'))
+socket = SocketIO(app)
 login_manager = LoginManager(app)
+
+admin_permission = Permission(RoleNeed('admin'))
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 
@@ -49,4 +54,5 @@ add import statements here to avoid circular imports
 import demo.api
 import demo.models
 import demo.views
+import demo.socketSetup
 #pylint: enable=wrong-import-position

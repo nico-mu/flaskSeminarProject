@@ -128,6 +128,7 @@ class Message(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     payload = db.Column(db.String(length=256), nullable=False)
     sender_id = db.Column(db.Integer(), db.ForeignKey('user.id'), nullable=False)
+    sender_name = db.Column(db.String(length=16), db.ForeignKey('user.name'), nullable=False)
     receiver_id = db.Column(db.Integer(), db.ForeignKey('user.id'), nullable=False)
     timestamp = db.Column(db.Integer(), nullable=False)
     server_id = db.Column(db.Integer(), db.ForeignKey('server.id'))
