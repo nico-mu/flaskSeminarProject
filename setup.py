@@ -17,6 +17,6 @@ setup(
         'flask_login',
         'flask_principal',
         'flask-socketio',
-        'eventlet'
+        'simple-websocket'
     ],
 )
