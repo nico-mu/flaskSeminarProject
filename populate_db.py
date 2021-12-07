@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 from demo import db
 from demo.models import User, Server, Message
-from time import time
 
 nico = User(name='Nico', password="12345", admin=True)
 luca = User(name='Luca', password="123")
@@ -29,9 +28,9 @@ db.session.commit()
 
 nico = User.query.filter_by(name='Nico').first()
 luca = User.query.filter_by(name='Luca').first()
-messageOne = Message(payload="Hello World", sender=nico, timestamp=time())
-messageTwo = Message(payload="Hello World back!", sender=luca, timestamp=time())
-messageThree = Message(payload="Test", sender=nico, timestamp=time())
+messageOne = Message(payload="Hello World", sender=nico, timestamp=db.func.now())
+messageTwo = Message(payload="Hello World back!", sender=luca, timestamp=db.func.now())
+messageThree = Message(payload="Test", sender=nico, timestamp=db.func.now())
 db.session.add_all([messageOne, messageTwo, messageThree, nico, luca])
 db.session.commit()
 

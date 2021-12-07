@@ -65,7 +65,7 @@ crossorigin="anonymous"
         <div id="messages" class="container-fluid table-wrapper-scroll-y my-custom-scrollbar">
             <ul id="messages" class="list-group list-group-flush">
                 {% for message in messages %}
-                    <li class="list-group-item">{{ message.sender_name }} : {{ message.payload }}</li>
+                    <li class="list-group-item">[{{ message.timestamp }}] {{ message.sender.name }} : {{ message.payload }}</li>
                 {% endfor %}
             </ul>
         </div>
