@@ -32,6 +32,7 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(length=60), nullable=False)
     servers = db.relationship('Server', secondary=association_table,
         back_populates="members")
+    messages = db.relationship('Message', back_populates='sender')
     admin = db.Column(db.Boolean, default=False)
     token = db.Column(db.String(length=36), unique=True)
     online = db.Column(db.Boolean, default=False)
@@ -95,7 +96,6 @@ class Server(db.Model):
     owner_id = db.Column(db.Integer(), nullable=False)
     status = db.Column(db.Boolean, nullable=False)
     members = db.relationship('User', secondary=association_table, back_populates='servers')
-    messages = db.relationship("Message", back_populates="server")
 
     def getAll():
         '''
@@ -128,11 +128,8 @@ class Message(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     payload = db.Column(db.String(length=256), nullable=False)
     sender_id = db.Column(db.Integer(), db.ForeignKey('user.id'), nullable=False)
-    sender_name = db.Column(db.String(length=16), db.ForeignKey('user.name'), nullable=False)
-    receiver_id = db.Column(db.Integer(), db.ForeignKey('user.id'), nullable=False)
+    sender = db.relationship('User', back_populates='messages')
     timestamp = db.Column(db.Integer(), nullable=False)
-    server_id = db.Column(db.Integer(), db.ForeignKey('server.id'))
-    server = db.relationship("Server", back_populates="messages")
 
     def getAll():
         '''
