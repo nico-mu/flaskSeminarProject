@@ -11,7 +11,6 @@ Main Module for the app
 #           flask_login         0.5.0
 #           flask-principal     0.4.0
 #           flask-socketio      5.1.1
-#           eventlet            0.33.0
 
 from flask import Flask
 from flask_bcrypt import Bcrypt
