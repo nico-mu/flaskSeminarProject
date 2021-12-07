@@ -160,3 +160,26 @@ def post_server_leave(serverId):
                 db.session.commit()
                 return Response(str({'status': 'OK'}), status=200, mimetype='application/json')
     return Response(str({'error': 'Invalid session token'}), status=401, mimetype='application/json')
+
+@app.post('/api/message')
+def post_message():
+    '''
+    Post a global message
+    Body:
+        {
+            "uuid" : String,
+            "payload" : String
+        }
+    '''
+    data = request.get_json()
+    token = data.get("uuid")
+    payload = data.get("payload")
+    if token and payload:
+        user = User.getByToken(token)
+        if user:
+            message = Message(sender=user, payload=payload)
+            db.session.add(message)
+            db.session.commit()
+            from demo.socketSetup import sendMessage
+            sendMessage(message)
+            return Response(str({'status': 'OK'}), status=200, mimetype='application/json')
