@@ -129,7 +129,7 @@ class Message(db.Model):
     payload = db.Column(db.String(length=256), nullable=False)
     sender_id = db.Column(db.Integer(), db.ForeignKey('user.id'), nullable=False)
     sender = db.relationship('User', back_populates='messages')
-    timestamp = db.Column(db.Integer(), nullable=False)
+    timestamp = db.Column(db.Integer(), default=db.func.now())
 
     def getAll():
         '''

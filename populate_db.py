@@ -28,9 +28,9 @@ db.session.commit()
 
 nico = User.query.filter_by(name='Nico').first()
 luca = User.query.filter_by(name='Luca').first()
-messageOne = Message(payload="Hello World", sender=nico, timestamp=db.func.now())
-messageTwo = Message(payload="Hello World back!", sender=luca, timestamp=db.func.now())
-messageThree = Message(payload="Test", sender=nico, timestamp=db.func.now())
+messageOne = Message(payload="Hello World", sender=nico)
+messageTwo = Message(payload="Hello World back!", sender=luca)
+messageThree = Message(payload="Test", sender=nico)
 db.session.add_all([messageOne, messageTwo, messageThree, nico, luca])
 db.session.commit()
 

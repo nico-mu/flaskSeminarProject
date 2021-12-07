@@ -6,7 +6,7 @@ import flask_login
 '''
 @socket.on("message")
 def handleMessage(msg):
-    message = models.Message(payload=msg, timestamp=db.func.now(), sender=flask_login.current_user)
+    message = models.Message(payload=msg, sender=flask_login.current_user)
     db.session.add(message)
     db.session.commit()
     socket.send(f"[{message.timestamp}] {message.sender.name} : {message.payload}" , broadcast=True)
